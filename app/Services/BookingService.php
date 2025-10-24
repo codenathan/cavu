@@ -106,8 +106,8 @@ class BookingService
             $updateData = [
                 'car_plate' => isset($data['car_plate']) ? strtoupper($data['car_plate']) : $booking->car_plate,
                 'customer_name' => $data['customer_name'] ?? $booking->customer_name,
-                'parking_from' => $from ?? $booking->parking_from,
-                'parking_to' => $to ?? $booking->parking_to,
+                'parking_from' => $from,
+                'parking_to' => $to,
                 'price' => $newPrice,
             ];
 

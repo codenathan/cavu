@@ -25,8 +25,8 @@ class UpdateBookingRequest extends FormRequest
             'customer_name' => 'sometimes|required|string|max:255',
             'customer_email' => 'sometimes|nullable|email|max:255',
             'car_plate' => 'sometimes|nullable|string|max:50',
-            'parking_from' => 'sometimes|date',
-            'parking_to' => 'sometimes|date|after_or_equal:parking_from',
+            'parking_from' => 'required|date',
+            'parking_to' => 'required|date|after_or_equal:parking_from',
         ];
     }
 }
