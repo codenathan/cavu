@@ -68,7 +68,7 @@ class BookingApiTest extends TestCase
 
         $newDates = [
             'parking_from' => Carbon::now()->addDays(7)->toDateString(),
-            'parking_to' => Carbon::now()->addDays(8)->toDateString(),
+            'parking_to' => Carbon::now()->addDays(7)->toDateString(),
         ];
         $updateData = array_merge($newDates, ['car_plate' => 'NEWPLATE']);
 
