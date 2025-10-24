@@ -12,20 +12,12 @@ use Illuminate\Support\Facades\DB;
 
 class BookingService
 {
-    protected PricingService $pricingService;
-    protected CapacityService $capacityService;
-    protected BookingRepositoryInterface $bookingRepository;
-
     public function __construct(
-        PricingService $pricingService,
-        CapacityService $capacityService,
-        BookingRepositoryInterface $bookingRepository
+        protected PricingService $pricingService,
+        protected CapacityService $capacityService,
+        protected BookingRepositoryInterface $bookingRepository
     ) {
-        $this->pricingService = $pricingService;
-        $this->capacityService = $capacityService;
-        $this->bookingRepository = $bookingRepository;
     }
-
 
     /**
      * Checks parking availability for the given period.
@@ -111,7 +103,6 @@ class BookingService
         // 3. Update Booking via Transaction
         DB::beginTransaction();
         try {
-
             $updateData = [
                 'car_plate' => isset($data['car_plate']) ? strtoupper($data['car_plate']) : $booking->car_plate,
                 'customer_name' => $data['customer_name'] ?? $booking->customer_name,
