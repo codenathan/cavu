@@ -84,9 +84,7 @@ class BookingController extends Controller
                 'booking' => $result['booking'],
                 'price_change_gbp' => number_format($result['price_change_pence'] / 100, 2),
             ]);
-        } catch (BookingAmendmentNotAllowedException $e) {
-            return response()->json(['message' => $e->getMessage()], 400);
-        } catch (CapacityExceededException $e) {
+        } catch (BookingAmendmentNotAllowedException|CapacityExceededException $e) {
             return response()->json(['message' => $e->getMessage()], 400);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Amendment failed due to a server error.', 'error' => $e->getMessage()], 500);
