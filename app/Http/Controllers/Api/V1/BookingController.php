@@ -47,7 +47,7 @@ class BookingController extends Controller
 
         return response()->json([
             'message' => 'Parking price calculated successfully.',
-            'price_gbp' => number_format($price / 100, 2), // Return price in GBP
+            'price_gbp' => number_format($price / 100, 2),
             'price_pence' => $price,
         ]);
     }
@@ -83,6 +83,7 @@ class BookingController extends Controller
                 'message' => 'Booking amended successfully.',
                 'booking' => $result['booking'],
                 'price_change_gbp' => number_format($result['price_change_pence'] / 100, 2),
+                'price_change_pence' => $result['price_change_pence'],
             ]);
         } catch (BookingAmendmentNotAllowedException|CapacityExceededException $e) {
             return response()->json(['message' => $e->getMessage()], 400);
