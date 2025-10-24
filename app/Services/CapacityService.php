@@ -65,17 +65,18 @@ class CapacityService
             ->where(function ($query) use ($startOfDay, $endOfDay) {
                 $query->where(function ($q) use ($startOfDay, $endOfDay) {
                     // Booking starts on this day
-                    $q->whereBetween('start_date', [$startOfDay, $endOfDay]);
+                    $q->whereBetween('parking_from', [$startOfDay, $endOfDay]);
                 })->orWhere(function ($q) use ($startOfDay, $endOfDay) {
                     // Booking ends on this day
-                    $q->whereBetween('end_date', [$startOfDay, $endOfDay]);
+                    $q->whereBetween('parking_to', [$startOfDay, $endOfDay]);
                 })->orWhere(function ($q) use ($startOfDay, $endOfDay) {
                     // Booking spans across this day
-                    $q->where('start_date', '<=', $startOfDay)
-                        ->where('end_date', '>=', $endOfDay);
+                    $q->where('parking_from', '<=', $startOfDay)
+                        ->where('parking_to', '>=', $endOfDay);
                 });
             })
-            ->when($excludeBookingId, fn ($q) => $q->where('id', '!=', $excludeBookingId))
+            ->when($excludeBookingId, fn($q) => $q->where('id', '!=', $excludeBookingId))
             ->count();
     }
+
 }

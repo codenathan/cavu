@@ -21,6 +21,15 @@ class Booking extends Model
         'end_date' => 'date',
     ];
 
+    protected $fillable = [
+      'parking_from',
+      'parking_to',
+      'car_plate',
+      'customer_name',
+      'status',
+        'price'
+    ];
+
 
     public function scopeActive($query)
     {
