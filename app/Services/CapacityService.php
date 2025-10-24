@@ -16,7 +16,7 @@ class CapacityService
      */
     public function isAvailable(Carbon $from, Carbon $to, ?int $excludeBookingId = null): bool
     {
-        $period = CarbonPeriod::create($from->startOfDay(), $to->startOfDay());
+        $period = CarbonPeriod::create($from->startOfDay(), $to->endOfDay());
 
         foreach ($period as $date) {
             $occupiedSpaces = $this->getOccupiedSpaces($date, $excludeBookingId);

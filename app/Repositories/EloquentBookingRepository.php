@@ -43,15 +43,4 @@ class EloquentBookingRepository implements BookingRepositoryInterface
     {
         return $booking->update(['status' => Status::CANCELLED]);
     }
-
-    /**
-     * Get all active bookings within a date range (for capacity checks or reporting).
-     */
-    public function getActiveBookings(string $from, string $to): Collection
-    {
-        return Booking::where('status', Status::ACTIVE)
-            ->where('parking_from', '<=', $to)
-            ->where('parking_to', '>=', $from)
-            ->get();
-    }
 }

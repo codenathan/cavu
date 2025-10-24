@@ -26,9 +26,4 @@ interface BookingRepositoryInterface
      * Delete a booking record by setting its status to CANCELLED (soft delete).
      */
     public function softDelete(Booking $booking): bool;
-
-    /**
-     * Get all active bookings within a date range (if needed by other services/logic).
-     */
-    public function getActiveBookings(string $from, string $to): Collection;
 }
