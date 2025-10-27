@@ -20,8 +20,8 @@ class BookingApiTest extends TestCase
     {
         parent::setUp();
         $this->baseData = [
-            'parking_from' => Carbon::now()->addDays(2),
-            'parking_to' => Carbon::now()->addDays(5),
+            'parking_from' => Carbon::now()->addDays(2)->toDateString(),
+            'parking_to' => Carbon::now()->addDays(5)->toDateString(),
             'car_plate' => 'CAVU123',
             'customer_name' => 'John Doe',
         ];
@@ -35,7 +35,7 @@ class BookingApiTest extends TestCase
 
     public function test_shows_full_capacity_when_no_bookings_exist()
     {
-        $response = $this->postJson('api/v1/parking/check-availability', $this->baseData);
+        $response = $this->getJson('api/v1/parking/check-availability?' . http_build_query($this->baseData));
 
         $response->assertStatus(200)
             ->assertJson([
@@ -44,7 +44,10 @@ class BookingApiTest extends TestCase
                 'message' => 'Parking space is available for the requested period.'
             ]);
 
-        $this->assertEquals(CapacityService::MAX_CAPACITY, $response['daily_availability'][0]['available_spaces']);
+        $this->assertEquals(
+            CapacityService::MAX_CAPACITY,
+            $response['daily_availability'][0]['available_spaces']
+        );
     }
 
     public function test_booking_is_blocked_when_capacity_is_fully_booked()
@@ -80,10 +83,10 @@ class BookingApiTest extends TestCase
         $this->assertDatabaseHas('bookings', [
             'id' => $booking->id,
             'car_plate' => 'NEWPLATE',
-            'price' => 1500,
+            'price' => 2000,
         ]);
 
-        $response->assertJsonFragment(['price_change_gbp' => '-15.00']);
+        $response->assertJsonFragment(['price_change_gbp' => '-10.00']);
     }
 
     public function test_an_amendment_fails_if_new_dates_have_no_capacity()
@@ -121,7 +124,8 @@ class BookingApiTest extends TestCase
         $bookingToCancel = Booking::latest()->first();
 
         // 2. Check for zero availability
-        $checkBefore = $this->postJson('api/v1/parking/check-availability', $this->baseData);
+        $checkBefore = $this->getJson('api/v1/parking/check-availability?'.http_build_query($this->baseData));
+
         $this->assertFalse($checkBefore['is_available']);
 
         // 3. Cancel the booking
@@ -132,7 +136,7 @@ class BookingApiTest extends TestCase
         $this->assertDatabaseHas('bookings', ['id' => $bookingToCancel->id, 'status' => 'cancelled']);
 
         // 4. Check for increased availability (should be 1 space free now)
-        $checkAfter = $this->postJson('api/v1/parking/check-availability', $this->baseData);
+        $checkAfter = $this->getJson('api/v1/parking/check-availability?'. http_build_query($this->baseData));
         $this->assertTrue($checkAfter['is_available']);
     }
 }

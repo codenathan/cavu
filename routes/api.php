@@ -10,7 +10,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');*/
 
 Route::prefix('v1')->group(function () {
-    Route::post('parking/check-availability', [BookingController::class,'checkAvailability']);
-    Route::post('parking/check-price', [BookingController::class,'checkPrice']);
+    Route::get('parking/check-availability', [BookingController::class,'checkAvailability']);
+    Route::get('parking/check-price', [BookingController::class,'checkPrice']);
     Route::apiResource('bookings', BookingController::class)->except(['index']);
 });
